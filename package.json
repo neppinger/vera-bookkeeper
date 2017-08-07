@@ -1,11 +1,11 @@
 {
   "name": "vera-bookkeeper",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Bookkeeper is the interface to the vera-network hosts RPC/API interface",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Verady/bookkeeper.git"
+    "url": "git+https://github.com/Verady/vera-bookkeeper.git"
   },
   "license": "Apache-2.0", 
   "bin": {
