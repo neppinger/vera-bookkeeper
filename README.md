@@ -14,7 +14,7 @@ npm install vera-bookkeeper -g
 ## Running
 
 ```
-vera-bookkeeper (-h for options) 
+vera-bookkeeper (--help for options) 
 ```
 
 ## Built With
