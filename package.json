@@ -1,6 +1,6 @@
 {
   "name": "vera-bookkeeper",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Bookkeeper is the interface to the vera-network hosts RPC/API interface",
   "main": "index.js",
   "repository": {
