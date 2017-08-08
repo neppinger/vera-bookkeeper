@@ -68,7 +68,15 @@ var server = dnode({
       //TODO switch to node scoring and sharding
       //TODO add in checking on message to make sure it can and will process the job
       node.iterativeFindNode(bookkeeper.seed, function(err, contacts){
-        let contact = contacts[0];
+        let contact;
+        let port = options.port-1;
+        for(let i = 0; i < contacts.length; i++){
+          if(parseInt(contacts[i][1].port) !== port){
+            contact = contacts[i];
+            break;
+          }
+        }
+        console.log(contact);
         return node.send(message, params, contact, cb);
       });
     }

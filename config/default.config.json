@@ -1,7 +1,7 @@
 {
   "host": "127.0.0.1",
   "seedhost": "127.0.0.1:1337",
-  "port": "4001",
+  "port": "4005",
   "seed": "1418554e21ceb34509ae20594be42cc73dcaca9d",
   "storage": ".veranode/storage.db"
 }
