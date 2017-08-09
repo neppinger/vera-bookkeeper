@@ -9,6 +9,7 @@ const {homedir} = require('os');
 const mkdirp = require('mkdirp');
 const VeraNode = require('../lib/veranode-book');
 const dnode = require('dnode');
+const async = require('async');
 
 const defaultConfig = JSON.parse(
   fs.readFileSync(
@@ -38,10 +39,10 @@ function setStorage(path){
   return path;
 }
 
-let storage = setStorage(path.join(homedir(), '.bookkeeper/storage.db'));
-let seedHost = getHostAndPort(bookkeeper.seedhost);
+const storage = setStorage(path.join(homedir(), '.bookkeeper/', bookkeeper.port, 'storage.db'));
+const seedHost = getHostAndPort(bookkeeper.seedhost);
 
-let options = {
+const options = {
   host: bookkeeper.host,
   port: bookkeeper.port,
   seed: [
@@ -67,17 +68,17 @@ var server = dnode({
     sendJob : function (message, params, cb) {
       //TODO switch to node scoring and sharding
       //TODO add in checking on message to make sure it can and will process the job
-      node.iterativeFindNode(bookkeeper.seed, function(err, contacts){
-        let contact;
-        let port = options.port-1;
-        for(let i = 0; i < contacts.length; i++){
-          if(parseInt(contacts[i][1].port) !== port){
-            contact = contacts[i];
-            break;
-          }
+      const indices = [
+        ...node.router.entries()
+      ].slice(0).map((entry) => entry[0]);
+      async.eachSeries(indices, (index, next) => {
+        const bucketContacts = node.router.get(index);
+        if(bucketContacts.length>0 && bucketContacts.head !== options.seed){
+          node.send(message, params, bucketContacts.head, cb);
+          return next('stop');
+        } else {
+          next();
         }
-        console.log(contact);
-        return node.send(message, params, contact, cb);
       });
     }
 });
