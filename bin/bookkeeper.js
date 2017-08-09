@@ -73,11 +73,18 @@ var server = dnode({
       ].slice(0).map((entry) => entry[0]);
       async.eachSeries(indices, (index, next) => {
         const bucketContacts = node.router.get(index);
-        if(bucketContacts.length>0 && bucketContacts.head !== options.seed){
+        if(bucketContacts.length>0 && bucketContacts.head[0] !== options.seed[0] &&
+          parseInt(bucketContacts.head[1].port) !== options.port-1){
           node.send(message, params, bucketContacts.head, cb);
           return next('stop');
         } else {
           next();
+        }
+      }, function(err){
+        if(err){
+          return;
+        } else {
+          return cb(new Error('no vera-node found'));
         }
       });
     }
